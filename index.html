@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surat Untukmu</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(145deg, #fad0c4, #ffd1ff);
+      font-family: 'Open Sans', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .container {
+      perspective: 1200px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .envelope {
+      position: relative;
+      width: 340px;
+      height: 220px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      transform-style: preserve-3d;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.8s ease;
+    }
+
+    .envelope.open {
+      width: 90vw;
+      height: 85vh;
+      border-radius: 16px;
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: #ff8ba7;
+      transform-origin: top;
+      transition: transform 0.8s ease;
+      z-index: 2;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+
+    .envelope.open .flap {
+      transform: rotateX(-180deg);
+    }
+
+    .letter {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      padding: 25px;
+      text-align: center;
+      overflow-y: auto;
+      transition: transform 1s ease;
+      z-index: 1;
+    }
+
+    .envelope.open .letter {
+      transform: translateY(-100%);
+    }
+
+    .letter h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 32px;
+      margin: 0;
+      color: #333;
+    }
+
+    .letter p {
+      margin: 10px 0;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ff8ba7;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .close-btn:hover {
+      background: #ff6e95;
+    }
+
+    audio {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .envelope.open {
+        width: 95vw;
+        height: 90vh;
+      }
+      .letter h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="envelope" id="envelope" onclick="openEnvelope()">
+    <div class="flap"></div>
+    <div class="letter" onclick="event.stopPropagation()">
+      <h1>Hai Kamu!</h1>
+      <p>bagaimana kabarmu? sudah lama sekali aku tidak menanyakan ini kepadamu dulu setiap hari aku menanyakan kabarmu hihi...</p>
+     <p>Bagaimana harimu apakah baik-baik aja di sana? </p> 
+      <p>oh iya aku mau bilang maaf jika selama kita temenan aku punya salah dan maaf juga waktu kamu ulang tahun aku gak bisa ngucapin ke kamu... </p>
+    <p>jujur aku rindu saat bisa cerita ke kamu, aku bisa keluarin semua keluh kesah aku, hmm aku di sini hanya bisa berdoa untukmu agar kamu selalu baik-baik aja</p>
+    <p>oh iya aku juga mau kabarin kamu soal orang tua aku, ya pada akhirnya kedua orangtuaku cerai dan ibuku setelah 1 bulan cerai dia menikah lagi kalo di bilang depresi ya aku depresi tapi aku selalu ingat kata kamu bahwa aku harus lebih kuat untuk menjalani kehidupan gak boleh putus semangat ya aku selalu berusaha melakukan itu tapi aku selalu saja lemah ketika malam hari aku selalu saja menangis ketika malam mungkin memang seenggak pantas itu aku untuk bahagia, jadi sekarang aku hanya bisa pasrah dan menunggu kematian karena aku sudah tidak bisa merasakan kebahagiaan sekarang ketika aku capek dengan kehidupan ini aku hanya bisa melamun dan menangis🥺</p>
+      <p>terimakasih ya atas kehadiranmu mungkin jika dulu kamu gak hadir aku tidak akn bisa bangkit, kamu juga gak boleh nyerah ya</p>
+      <p>Kamu telah melewati banyak hal, dan aku bangga padamu.</p>
+      <p>Terus melangkah, walau perlahan. Aku percaya kamu bisa.</p>
+      <p>and see you next time semoga kita bisa ketemu lagi dan aku bisa berterima kasih di depan kamu</p>
+      <p>Dari Seseorang Yang dulu pernah menganggap dirimu sebagai semestanya🥀</p>
+      <button class="close-btn" onclick="closeEnvelope()">Tutup Surat</button>
+    </div>
+  </div>
+</div>
+
+<audio id="openSound" src="https://cdn.pixabay.com/download/audio/2023/03/09/audio_6a10d64812.mp3?filename=page-flip-1-186105.mp3"></audio>
+
+<script>
+  function openEnvelope() {
+    const envelope = document.getElementById('envelope');
+    if (!envelope.classList.contains('open')) {
+      envelope.classList.add('open');
+      document.getElementById('openSound').play();
+    }
+  }
+
+  function closeEnvelope() {
+    document.getElementById('envelope').classList.remove('open');
+  }
+</script>
+
+</body>
+</html>
